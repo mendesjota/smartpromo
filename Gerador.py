@@ -6719,6 +6719,8 @@ elif promo_type == "Cobertura":
     max_desconto = st.number_input("Máximo de Desconto (%)", 0.0, 1.0)
     min_caixas = st.number_input("Mínimo de Caixas por PDV", 0)
     max_caixas = st.number_input("Máximo de Caixas por PDV", 0)
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 0)
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 0)
 
 # Escolha da Base de Clientes
 base_propria = st.radio("Base de Clientes", ["Total", "Própria"])
