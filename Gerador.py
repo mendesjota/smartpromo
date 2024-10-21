@@ -6817,7 +6817,7 @@ if st.button("Gerar Arquivo CSV"):
             DF_final = filtrado_data[['agrupador', 'unb', 'pdv']]
             
             # Exportação dos arquivos
-            st.download_button("Baixar Template", df.to_csv(index=False, sep=";", encoding="utf-8"), f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv", "text/csv")
+            st.download_button("Baixar Template", df.to_csv(index=False, sep=";", encoding="latin-1"), f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv", "text/csv")
             st.download_button("Baixar Base", DF_final.to_csv(index=False, sep=";", encoding="utf-8"), f"Base_{unb}_{data_inicio_default}.csv", "text/csv")
         else:
             st.error("A coluna 'unb' não está presente no arquivo CSV.")
