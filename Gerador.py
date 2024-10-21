@@ -6738,7 +6738,7 @@ elif promo_type == "Cobertura":
 
 # Escolha da Base de Clientes
 base_propria = st.radio("Base de Clientes", ["Total", "Própria"])
-csv_file = st.file_uploader("Faça o upload de uma base de dados que contenha as colunas 'unb' e 'pdv'em .CSV", type="csv") if base_propria == "Própria" else None
+csv_file = st.file_uploader("Faça o upload de uma base de dados que contenha as colunas 'unb' e 'pdv' em .CSV", type="csv") if base_propria == "Própria" else None
 
 dados = []    
 
