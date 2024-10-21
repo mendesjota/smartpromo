@@ -6691,9 +6691,9 @@ unb = st.selectbox("UNB Revenda", options=[f"{num} - {nome}" for num, nome in un
 
 # Inputs iniciais
 promo_type = st.selectbox("Tipo de promoção", ["Volume", "Cobertura"])
-titulo_promocao = st.text_input("Título da Promoção")
-nome_pote = st.text_input("Nome do Pote Completo")
-id_promocao = st.text_input("ID da Promoção")
+titulo_promocao = st.text_input("Título da Promoção", placeholder="Exemplo: Compre mais, pague menos!")
+nome_pote = st.text_input("Nome do Pote Completo", placeholder="Exemplo: 1_1_2_3.O6_GC")
+id_promocao = st.text_input("ID da Promoção", placeholder="Exemplo: INI-999")
 data_inicio = st.date_input("Data de Início", value=data_inicio_default.date(),format="DD/MM/YYYY")
 data_final = st.date_input("Data Final", value=ultimo_dia_mes.date(), format="DD/MM/YYYY")
 
