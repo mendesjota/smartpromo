@@ -6701,7 +6701,7 @@ data_inicio = st.date_input("Data de Início", value=data_inicio_default.date())
 data_final = st.date_input("Data Final", value=ultimo_dia_mes.date())
 
 # Otimização da base
-otimizar_base = st.radio("Otimizar a base?", ["Sim", "Não"])
+otimizar_base = st.radio("Otimizar a base?", ["Não", "Sim"])
 
 # Mostrar o valor selecionado para ver se está correto
 st.write(f"Valor selecionado para otimização: {otimizar_base}")
