@@ -6677,10 +6677,6 @@ skus = [
 ("33826","BEATS RED MIX LT 473ML SH C12 NP"),("33836","BEATS RED MIX PET 1 L SH C/06"),("33857","STELLA ARTOIS PURE GOLD 600ML"),("33933","TONICA ANTARCTICA INTENSE LT SLEEK 350ML SH C 12"),("34027","GUARANA CHP ANTARCTICA LATA 350ML SH C/12 NPAL MULTIPACK"),
 
 ]
-import streamlit as st
-import pandas as pd
-from datetime import datetime, timedelta
-
 # Configurando a data de início e a data final padrão
 data_inicio_default = datetime.now() + timedelta(days=1)
 ultimo_dia_mes = (datetime.now().replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
@@ -6697,21 +6693,14 @@ promo_type = st.selectbox("Tipo de promoção", ["Volume", "Cobertura"])
 titulo_promocao = st.text_input("Título da Promoção")
 nome_pote = st.text_input("Nome do Pote Completo")
 id_promocao = st.text_input("ID da Promoção")
-data_inicio = st.date_input("Data de Início", value=data_inicio_default.date())
-data_final = st.date_input("Data Final", value=ultimo_dia_mes.date())
+data_inicio = st.date_input("Data de Início", value=data_inicio_default.date(),format="DD/MM/YYYY")
+data_final = st.date_input("Data Final", value=ultimo_dia_mes.date(), format="DD/MM/YYYY")
 
 # Otimização da base
 otimizar_base = st.radio("Otimizar a base?", ["Não", "Sim"])
 
-# Mostrar o valor selecionado para ver se está correto
-st.write(f"Valor selecionado para otimização: {otimizar_base}")
-
 # Definir lifecicle com base na escolha
 lifecicle = "N" if otimizar_base == "Não" else "S"
-
-# Mostrar o valor de lifecicle para verificar a lógica
-st.write(f"Valor de lifecicle: {lifecicle}")
-
 
 # Campos específicos para Volume
 if promo_type == "Volume":
