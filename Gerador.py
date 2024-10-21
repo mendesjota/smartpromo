@@ -6709,13 +6709,13 @@ if promo_type == "Volume":
     ttv_fixo_disabled = False
 
     # Criando colunas para exibir os campos lado a lado
-   col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-   with col1:
-    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual", disabled=ttv_fixo_disabled)
+    with col1:
+       desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual", disabled=ttv_fixo_disabled)
 
-   with col2:
-    ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=desconto_percentual != "")
+    with col2:
+       ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=desconto_percentual != "")
 
            
     max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
