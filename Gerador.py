@@ -6705,17 +6705,23 @@ lifecicle = "N" if otimizar_base == "Não" else "S"
 # Campos específicos para Volume
 if promo_type == "Volume":
    # Criação dos campos com base no estado
-    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)")
-    ttv_fixo = st.text_input("TTV Fixo", disabled=bool(desconto_percentual))
+    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual")
     
-    # Se o campo TTV Fixo for preenchido, desativar o campo de desconto
+    # Desativar ttv_fixo se desconto_percentual estiver preenchido
+    ttv_fixo_disabled = bool(desconto_percentual)
+    ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=ttv_fixo_disabled)
+
+    # Desativar desconto_percentual se ttv_fixo estiver preenchido
     if ttv_fixo:
-        desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", disabled=True)
+        desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual_2", disabled=True)
        
     max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
     max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 1)
     min_caixas = st.number_input("Mínimo de Caixas por PDV", 1)
     max_caixas = st.number_input("Máximo de Caixas por PDV", 1)
+   
+    if desconto_percentual and ttv_fixo:
+        st.warning("Preencha apenas um dos campos: Desconto Percentual ou TTV Fixo.")
 
 # Campos específicos para Cobertura
 elif promo_type == "Cobertura":
