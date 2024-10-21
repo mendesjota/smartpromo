@@ -6682,7 +6682,8 @@ data_inicio_default = datetime.now() + timedelta(days=1)
 ultimo_dia_mes = (datetime.now().replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
 
 # Exibe o título
-st.title("Configuração de Smart Promo")
+st.title("Gerador de Smart Promo")
+st.write("Ferramenta desenvolvida para ajudar as equipes de campo a preencher corretamente os templates de Smart Promo do CORA.")
 
 # Seleção de múltiplos SKUs e UNB Revenda
 sku_selecionado = st.multiselect("Selecione o SKU", options=[f"{num} - {nome}" for num, nome in skus])
