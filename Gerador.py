@@ -6704,8 +6704,14 @@ lifecicle = "N" if otimizar_base == "Não" else "S"
 
 # Campos específicos para Volume
 if promo_type == "Volume":
+   # Criação dos campos com base no estado
     desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)")
-    ttv_fixo = st.text_input("TTV Fixo")
+    ttv_fixo = st.text_input("TTV Fixo", disabled=bool(desconto_percentual))
+    
+    # Se o campo TTV Fixo for preenchido, desativar o campo de desconto
+    if ttv_fixo:
+        desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", disabled=True)
+       
     max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
     max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 1)
     min_caixas = st.number_input("Mínimo de Caixas por PDV", 1)
