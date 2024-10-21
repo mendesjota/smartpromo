@@ -6702,16 +6702,25 @@ data_final = st.date_input("Data Final", value=ultimo_dia_mes.date())
 
 # Otimização da base
 otimizar_base = st.radio("Otimizar a base?", ["Sim", "Não"])
+
+# Mostrar o valor selecionado para ver se está correto
+st.write(f"Valor selecionado para otimização: {otimizar_base}")
+
+# Definir lifecicle com base na escolha
 lifecicle = "N" if otimizar_base == "Sim" else "S"
+
+# Mostrar o valor de lifecicle para verificar a lógica
+st.write(f"Valor de lifecicle: {lifecicle}")
+
 
 # Campos específicos para Volume
 if promo_type == "Volume":
-    desconto_percentual = st.number_input("Desconto Percentual (0 a 1.0)", 0.0, 1.0)
-    ttv_fixo = st.number_input("TTV Fixo", 0.0, 99999.0)
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 0)
-    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 0)
-    min_caixas = st.number_input("Mínimo de Caixas por PDV", 0)
-    max_caixas = st.number_input("Máximo de Caixas por PDV", 0)
+    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)")
+    ttv_fixo = st.text_input("TTV Fixo")
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 1)
+    min_caixas = st.number_input("Mínimo de Caixas por PDV", 1)
+    max_caixas = st.number_input("Máximo de Caixas por PDV", 1)
 
 # Campos específicos para Cobertura
 elif promo_type == "Cobertura":
