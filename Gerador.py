@@ -6707,7 +6707,7 @@ otimizar_base = st.radio("Otimizar a base?", ["Não", "Sim"])
 st.write(f"Valor selecionado para otimização: {otimizar_base}")
 
 # Definir lifecicle com base na escolha
-lifecicle = "N" if otimizar_base == "Sim" else lifecicle = "S"
+lifecicle = "N" if otimizar_base == "Não" else "S"
 
 # Mostrar o valor de lifecicle para verificar a lógica
 st.write(f"Valor de lifecicle: {lifecicle}")
