@@ -6704,15 +6704,13 @@ lifecicle = "N" if otimizar_base == "Não" else "S"
 
 # Campos específicos para Volume
 if promo_type == "Volume":
-   # Verifica se um campo está preenchido para desativar o outro
-    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual", disabled=False)
-    ttv_fixo_disabled = bool(desconto_percentual)  # Desativa TTV Fixo se desconto_percentual estiver preenchido
-    
-    ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=ttv_fixo_disabled)
+    # Inicialmente ambos os campos estão habilitados
+    desconto_percentual_disabled = False
+    ttv_fixo_disabled = False
 
-    # Desativa desconto_percentual se ttv_fixo estiver preenchido
-    desconto_percentual_disabled = bool(ttv_fixo)
-    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual_2", disabled=desconto_percentual_disabled)
+    # Verifica se um campo já foi preenchido
+    desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual", disabled=ttv_fixo_disabled)
+    ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=desconto_percentual != "")
 
            
     max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
