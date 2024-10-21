@@ -6729,8 +6729,13 @@ if promo_type == "Volume":
 
 # Campos específicos para Cobertura
 elif promo_type == "Cobertura":
-    min_desconto = st.number_input("Mínimo de Desconto (%)", 0.0, 1.0)
-    max_desconto = st.number_input("Máximo de Desconto (%)", 0.0, 1.0)
+   # Criando colunas para exibir os campos lado a lado
+    col1, col2 = st.columns(2)
+    with col1:
+       min_desconto = st.number_input("Mínimo de Desconto (%)", 0.0, 1.0)
+    with col2:
+       max_desconto = st.number_input("Máximo de Desconto (%)", 0.0, 1.0)
+   
     min_caixas = st.number_input("Mínimo de Caixas por PDV", 0)
     max_caixas = st.number_input("Máximo de Caixas por PDV", 0)
     max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 0)
