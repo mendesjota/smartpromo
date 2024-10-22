@@ -6758,10 +6758,10 @@ elif promo_type == "Cobertura":
     col1, col2 = st.columns(2)
 
     with col1:
-        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", min_value=0.000, max_value=0.5999, step=0.001)
+        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", min_value=0.000, max_value=0.5999, step=0.01)
 
     with col2:
-        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", min_value=min_desconto + 0.020, max_value=0.599, step=0.001)
+        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", min_value=min_desconto + 0.020, max_value=0.599, step=0.01)
 
     if max_desconto < min_desconto + 0.02:
         st.warning("O desconto máximo deve ser pelo menos 0.02 maior que o desconto mínimo.")
