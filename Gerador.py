@@ -6713,9 +6713,6 @@ if not nome_pote:
     st.stop()
 
 id_promocao = st.text_input("ID da Promoção", placeholder="Exemplo: INI-999")
-if not id_promocao:
-    st.warning("Por favor, preencha o ID da promoção.")
-    st.stop()
 
 data_inicio = st.date_input("Data de Início", value=data_inicio_default.date(), format="DD/MM/YYYY")
 data_final = st.date_input("Data Final", value=ultimo_dia_mes.date(), format="DD/MM/YYYY")
@@ -6739,18 +6736,18 @@ if promo_type == "Volume":
         st.warning("Preencha apenas um dos campos: Desconto Percentual ou TTV Fixo.")
         st.stop()
 
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+   min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1) 
 
+   max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
+    if max_caixas < min_caixas + 10:
+        st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima.")
+        st.stop()
+
+   max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+   
     max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=max_pedidos)
     if max_skus < max_pedidos:
         st.warning("A quantidade máxima de SKUs por cliente deve ser maior ou igual à quantidade máxima de pedidos por cliente.")
-        st.stop()
-
-    min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
-
-    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
-    if max_caixas < min_caixas + 10:
-        st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima.")
         st.stop()
 
 # Campos específicos para Cobertura
