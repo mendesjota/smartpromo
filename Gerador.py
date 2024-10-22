@@ -6718,11 +6718,25 @@ if promo_type == "Volume":
     with col2:
        ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=desconto_percentual != "")
 
-           
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
-    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 1)
-    min_caixas = st.number_input("Mínimo de Caixas por PDV", 1)
-    max_caixas = st.number_input("Máximo de Caixas por PDV", 1)
+     # Input para o máximo de pedidos por cliente
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+
+      # Input para o máximo de SKUs por cliente (deve ser maior ou igual a max_caixas)
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=1, value=max_pedidos)
+
+      # Input para o mínimo de caixas por PDV
+    min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
+
+      # Input para o máximo de caixas por PDV, com validação para ser no mínimo 10 unidades a mais que min_caixas
+    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
+
+      # Verificação final dos inputs
+    if max_skus < max_pedidos:
+    st.warning("A quantidade máxima de SKUs por cliente deve ser maior ou igual à quantidade máxima de pedidos por cliente.")
+      elif max_caixas < min_caixas + 10:
+       st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima de caixas por PDV.")
+      else:
+       st.success("Configuração válida!")
    
     if desconto_percentual and ttv_fixo:
         st.warning("Preencha apenas um dos campos: Desconto Percentual ou TTV Fixo.")
@@ -6731,15 +6745,25 @@ if promo_type == "Volume":
 elif promo_type == "Cobertura":
    # Criando colunas para exibir os campos lado a lado
     col1, col2 = st.columns(2)
+
     with col1:
-       min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", 0.0, 1.0)
+        # Input para o mínimo de desconto
+        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", min_value=0.0, max_value=1.0, step=0.01)
+
     with col2:
-       max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", 0.0, 1.0)
+        # Input para o máximo de desconto, com a condição de ser pelo menos 0.02 maior que o mínimo
+        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", min_value=min_desconto + 0.02, max_value=1.0, step=0.01)
+
+    # Verificação final dos inputs
+    if max_desconto < min_desconto + 0.02:
+        st.warning("O desconto máximo deve ser pelo menos 0.02 maior que o desconto mínimo.")
+    else:
+        st.success("Descontos configurados corretamente!")
    
-    min_caixas = st.number_input("Mínimo de Caixas por PDV", 0)
-    max_caixas = st.number_input("Máximo de Caixas por PDV", 0)
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 0)
-    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 0)
+    min_caixas = st.number_input("Mínimo de Caixas por PDV", 1)
+    max_caixas = st.number_input("Máximo de Caixas por PDV", 1)
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 1)
 
 # Escolha da Base de Clientes
 base_propria = st.radio("Base de Clientes", ["Total", "Própria"])
