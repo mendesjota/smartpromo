@@ -6677,6 +6677,10 @@ skus = [
 ("33826","BEATS RED MIX LT 473ML SH C12 NP"),("33836","BEATS RED MIX PET 1 L SH C/06"),("33857","STELLA ARTOIS PURE GOLD 600ML"),("33933","TONICA ANTARCTICA INTENSE LT SLEEK 350ML SH C 12"),("34027","GUARANA CHP ANTARCTICA LATA 350ML SH C/12 NPAL MULTIPACK"),
 
 ]
+from datetime import datetime, timedelta
+import pandas as pd
+import streamlit as st
+
 # Configurando a data de início e a data final padrão
 data_inicio_default = datetime.now() + timedelta(days=1)
 ultimo_dia_mes = (datetime.now().replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
@@ -6687,93 +6691,101 @@ st.write("Ferramenta desenvolvida para ajudar as equipes de campo a preencher co
 
 # Seleção de múltiplos SKUs e UNB Revenda
 sku_selecionado = st.multiselect("Selecione o SKU", options=[f"{num} - {nome}" for num, nome in skus])
+if not sku_selecionado:
+    st.warning("Por favor, selecione pelo menos um SKU.")
+    st.stop()
+
 unb = st.selectbox("UNB Revenda", options=[f"{num} - {nome}" for num, nome in unb_revenda])
+if not unb:
+    st.warning("Por favor, selecione uma UNB Revenda.")
+    st.stop()
 
 # Inputs iniciais
 promo_type = st.selectbox("Tipo de promoção", ["Volume", "Cobertura"])
 titulo_promocao = st.text_input("Título da Promoção", placeholder="Exemplo: Compre mais, pague menos!")
+if not titulo_promocao:
+    st.warning("Por favor, preencha o título da promoção.")
+    st.stop()
+
 nome_pote = st.text_input("Nome do Pote Completo", placeholder="Exemplo: 1_1_2_3.O6_GC")
+if not nome_pote:
+    st.warning("Por favor, preencha o nome do pote completo.")
+    st.stop()
+
 id_promocao = st.text_input("ID da Promoção", placeholder="Exemplo: INI-999")
-data_inicio = st.date_input("Data de Início", value=data_inicio_default.date(),format="DD/MM/YYYY")
+if not id_promocao:
+    st.warning("Por favor, preencha o ID da promoção.")
+    st.stop()
+
+data_inicio = st.date_input("Data de Início", value=data_inicio_default.date(), format="DD/MM/YYYY")
 data_final = st.date_input("Data Final", value=ultimo_dia_mes.date(), format="DD/MM/YYYY")
 
 # Otimização da base
 otimizar_base = st.radio("Otimizar a base?", ["Não", "Sim"])
-
-# Definir lifecicle com base na escolha
 lifecicle = "N" if otimizar_base == "Não" else "S"
 
 # Campos específicos para Volume
 if promo_type == "Volume":
-    # Inicialmente ambos os campos estão habilitados
-    desconto_percentual_disabled = False
-    ttv_fixo_disabled = False
-
-    # Criando colunas para exibir os campos lado a lado
     col1, col2 = st.columns(2)
 
     with col1:
-       desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual", disabled=ttv_fixo_disabled)
+        desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual")
 
     with col2:
-       ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo", disabled=desconto_percentual != "")
+        ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo")
 
-     # Input para o máximo de pedidos por cliente
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
-
-      # Input para o máximo de SKUs por cliente (deve ser maior ou igual a max_caixas)
-    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=1, value=max_pedidos)
-
-      # Input para o mínimo de caixas por PDV
-    min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
-
-      # Input para o máximo de caixas por PDV, com validação para ser no mínimo 10 unidades a mais que min_caixas
-    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
-
-      # Verificação final dos inputs
-    if max_skus < max_pedidos:
-    st.warning("A quantidade máxima de SKUs por cliente deve ser maior ou igual à quantidade máxima de pedidos por cliente.")
-      elif max_caixas < min_caixas + 10:
-       st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima de caixas por PDV.")
-      else:
-       st.success("Configuração válida!")
-   
+    # Validação de desconto ou TTV Fixo
     if desconto_percentual and ttv_fixo:
         st.warning("Preencha apenas um dos campos: Desconto Percentual ou TTV Fixo.")
+        st.stop()
+
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=max_pedidos)
+    if max_skus < max_pedidos:
+        st.warning("A quantidade máxima de SKUs por cliente deve ser maior ou igual à quantidade máxima de pedidos por cliente.")
+        st.stop()
+
+    min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
+
+    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
+    if max_caixas < min_caixas + 10:
+        st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima.")
+        st.stop()
 
 # Campos específicos para Cobertura
 elif promo_type == "Cobertura":
-   # Criando colunas para exibir os campos lado a lado
     col1, col2 = st.columns(2)
 
     with col1:
-        # Input para o mínimo de desconto
-        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", min_value=0.0, max_value=1.0, step=0.01)
+        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", min_value=0.000, max_value=0.5999, step=0.001)
 
     with col2:
-        # Input para o máximo de desconto, com a condição de ser pelo menos 0.02 maior que o mínimo
-        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", min_value=min_desconto + 0.02, max_value=1.0, step=0.01)
+        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", min_value=min_desconto + 0.020, max_value=0.599, step=0.001)
 
-    # Verificação final dos inputs
     if max_desconto < min_desconto + 0.02:
         st.warning("O desconto máximo deve ser pelo menos 0.02 maior que o desconto mínimo.")
-    else:
-        st.success("Descontos configurados corretamente!")
-   
-    min_caixas = st.number_input("Mínimo de Caixas por PDV", 1)
-    max_caixas = st.number_input("Máximo de Caixas por PDV", 1)
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", 1)
-    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", 1)
+        st.stop()
+
+    min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
+    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=1)
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=1)
 
 # Escolha da Base de Clientes
 base_propria = st.radio("Base de Clientes", ["Total", "Própria"])
 csv_file = st.file_uploader("Faça o upload de uma base de dados que contenha as colunas 'UNB' e 'PDV' em .CSV", type="csv") if base_propria == "Própria" else None
 
-dados = []    
+# Validando o carregamento do arquivo CSV
+if base_propria == "Própria" and csv_file is None:
+    st.warning("Por favor, faça o upload de uma base de dados em formato CSV.")
+    st.stop()
+
+# Dados a serem exportados
+dados = []
 
 # Botão para gerar o arquivo CSV
 if st.button("Gerar Arquivo CSV"):
-    # Configuração das colunas de acordo com o tipo de promoção
     for i, sku in enumerate(sku_selecionado, start=1):
         cod_sku = sku.split(" - ")[0]
         if promo_type == "Volume":
@@ -6811,50 +6823,25 @@ if st.button("Gerar Arquivo CSV"):
                 "max_desconto_percentual": max_desconto,
                 "max_quantidade_pedidos_cliente": max_pedidos,
                 "max_quantidade_skus_cliente": max_skus,
-
             })
 
-    # Criação do DataFrame com os dados coletados
     df = pd.DataFrame(dados)
 
-    # Carregar base de clientes, considerando o arquivo padrão se nenhum arquivo foi carregado
+    # Carregar base de clientes
     if csv_file:
-        try:
-            df_pdvs = pd.read_csv(csv_file)
-        except Exception as e:
-            st.error(f"Ocorreu um erro ao ler o arquivo CSV fornecido: {e}")
-            df_pdvs = None
+        df_pdvs = pd.read_csv(csv_file)
     else:
-        try:
-            df_pdvs = pd.read_csv("Book1.csv", encoding="utf-8", sep=";")
-        except Exception as e:
-            st.error(f"Ocorreu um erro ao carregar o arquivo padrão 'Book1.csv': {e}")
-            df_pdvs = None
+        df_pdvs = pd.read_csv("Book1.csv", encoding="utf-8", sep=";")
 
-    # Filtragem e exportação
-    if df_pdvs is not None:
-        if 'unb' in df_pdvs.columns:
-            cod_unb = unb.split(" - ")[0]
-            filtrado_data = df_pdvs[df_pdvs['unb'].astype(str) == cod_unb]
-            
-            # Adiciona a coluna 'agrupador' com a sequência de 1 até a quantidade de SKUs selecionados
-            quantidade_skus = len(sku_selecionado)
-            filtrado_data = filtrado_data.copy()  # Para evitar SettingWithCopyWarning
+    if 'unb' in df_pdvs.columns:
+        cod_unb = unb.split(" - ")[0]
+        filtrado_data = df_pdvs[df_pdvs['unb'].astype(str) == cod_unb]
 
-            # Cria a sequência de 1 até quantidade_skus
-            sequencia_agrupador = ', '.join(str(i) for i in range(1, quantidade_skus + 1))
+        quantidade_skus = len(sku_selecionado)
+        filtrado_data['agrupador'] = range(1, quantidade_skus + 1)
+        DF_final = filtrado_data[['agrupador', 'unb', 'pdv']]
 
-            # Adiciona a sequência à coluna 'agrupador'
-            filtrado_data['agrupador'] = sequencia_agrupador
+        st.download_button("Baixar Template", df.to_csv(index=False, sep=";", encoding="ISO-8859-1"), f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv", "text/csv")
+        st.download_button("Baixar Base", DF_final.to_csv(index=False, sep=";", encoding="utf-8"), f"Base_{unb}_{data_inicio_default}.csv", "text/csv")
 
-
-            # Seleciona colunas desejadas
-            DF_final = filtrado_data[['agrupador', 'unb', 'pdv']]
-            
-            # Exportação dos arquivos
-            st.download_button("Baixar Template", df.to_csv(index=False, sep=";", encoding="ISO-8859-1"), f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv", "text/csv")
-            st.download_button("Baixar Base", DF_final.to_csv(index=False, sep=";", encoding="utf-8"), f"Base_{unb}_{data_inicio_default}.csv", "text/csv")
-        else:
-            st.error("A coluna 'unb' não está presente no arquivo CSV.")
-    else:
-        st.error("Nenhum arquivo CSV foi carregado e o arquivo padrão não foi encontrado.")
+    st.success("Arquivos gerados com sucesso!")
