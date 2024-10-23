@@ -6677,10 +6677,6 @@ skus = [
 ("33826","BEATS RED MIX LT 473ML SH C12 NP"),("33836","BEATS RED MIX PET 1 L SH C/06"),("33857","STELLA ARTOIS PURE GOLD 600ML"),("33933","TONICA ANTARCTICA INTENSE LT SLEEK 350ML SH C 12"),("34027","GUARANA CHP ANTARCTICA LATA 350ML SH C/12 NPAL MULTIPACK"),
 
 ]
-from datetime import datetime, timedelta
-import pandas as pd
-import streamlit as st
-
 # Configurando a data de início e a data final padrão
 data_inicio_default = datetime.now() + timedelta(days=1)
 ultimo_dia_mes = (datetime.now().replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
@@ -6738,12 +6734,12 @@ if promo_type == "Volume":
 
     min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
 
-    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
-    if max_caixas < min_caixas + 10:
+    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 9)
+    if max_caixas < min_caixas + 9:
         st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima.")
         st.stop()
 
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=max_caixas)
 
     max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=max_pedidos)
     if max_skus < max_pedidos:
@@ -6755,10 +6751,10 @@ elif promo_type == "Cobertura":
     col1, col2 = st.columns(2)
 
     with col1:
-        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 1,0)", min_value=0.000, max_value=0.5999, step=0.01)
+        min_desconto = st.number_input("Mínimo de Desconto (de 0,0 a 0,59)", min_value=0.000, max_value=0.5999, step=0.01)
 
     with col2:
-        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 1,0)", min_value=min_desconto + 0.020, max_value=0.599, step=0.01)
+        max_desconto = st.number_input("Máximo de Desconto (de 0,0 a 0,59)", min_value=min_desconto + 0.020, max_value=0.599, step=0.01)
 
     if max_desconto < min_desconto + 0.02:
         st.warning("O desconto máximo deve ser pelo menos 0.02 maior que o desconto mínimo.")
@@ -6767,7 +6763,7 @@ elif promo_type == "Cobertura":
     min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
     max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=1)
     max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
-    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=1)
+    max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=max_caixas)
 
 # Escolha da Base de Clientes
 base_propria = st.radio("Base de Clientes", ["Total", "Própria"])
