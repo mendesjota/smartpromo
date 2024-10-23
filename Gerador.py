@@ -6822,21 +6822,69 @@ if st.button("Gerar Arquivo CSV"):
 
     df = pd.DataFrame(dados)
 
-    # Carregar base de clientes
-    if csv_file:
-        df_pdvs = pd.read_csv(csv_file) #o código esta travando aqui 
-    else:
+   # Carregar base de clientes
+if csv_file:  # Se o usuário fez upload de um arquivo CSV
+    # Tentativa de leitura do arquivo CSV enviado pelo usuário
+    try:
+        df_pdvs = pd.read_csv(csv_file)
+    except Exception as e:
+        st.error(f"Erro ao carregar o arquivo CSV: {e}")
+        st.stop()  # Interrompe a execução caso haja erro na leitura do arquivo
+else:  # Se nenhum arquivo foi enviado, usa o arquivo padrão "Book1.csv"
+    try:
         df_pdvs = pd.read_csv("Book1.csv", encoding="utf-8", sep=";")
+    except FileNotFoundError:
+        st.error("O arquivo 'Book1.csv' não foi encontrado.")
+        st.stop()  # Interrompe a execução se o arquivo não for encontrado
+    except Exception as e:
+        st.error(f"Erro ao carregar o arquivo padrão: {e}")
+        st.stop()  # Interrompe a execução caso haja outro erro
 
-    if 'unb' in df_pdvs.columns:
-        cod_unb = unb.split(" - ")[0]
-        filtrado_data = df_pdvs[df_pdvs['unb'].astype(str) == cod_unb]
+# Verifica se a coluna 'unb' existe no DataFrame carregado
+if 'unb' in df_pdvs.columns:
+    # Extrai o código UNB da seleção feita pelo usuário
+    cod_unb = unb.split(" - ")[0]
 
-        quantidade_skus = len(sku_selecionado)
+    # Filtra o DataFrame para incluir apenas as linhas que possuem o UNB correspondente
+    filtrado_data = df_pdvs[df_pdvs['unb'].astype(str) == cod_unb]
+
+    # Verificar o número de linhas no DataFrame filtrado
+    num_rows = filtrado_data.shape[0]
+
+    # Se não houver dados filtrados, exibe uma mensagem de erro
+    if num_rows == 0:
+        st.warning("Nenhum dado correspondente ao UNB selecionado foi encontrado.")
+        st.stop()  # Interrompe a execução caso não haja dados
+
+    # Quantidade de SKUs selecionados pelo usuário
+    quantidade_skus = len(sku_selecionado)
+
+    # Atribui valores à coluna 'agrupador', garantindo que o número de linhas seja adequado
+    if num_rows >= quantidade_skus:
         filtrado_data['agrupador'] = range(1, quantidade_skus + 1)
-        DF_final = filtrado_data[['agrupador', 'unb', 'pdv']]
+    else:
+        st.warning("A quantidade de SKUs selecionados é maior do que os dados disponíveis.")
+        st.stop()  # Interrompe a execução caso o número de SKUs seja maior que o número de linhas
 
-        st.download_button("Baixar Template", df.to_csv(index=False, sep=";", encoding="ISO-8859-1"), f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv", "text/csv")
-        st.download_button("Baixar Base", DF_final.to_csv(index=False, sep=";", encoding="utf-8"), f"Base_{unb}_{data_inicio_default}.csv", "text/csv")
+    # Seleciona as colunas necessárias para o arquivo final
+    DF_final = filtrado_data[['agrupador', 'unb', 'pdv']]
+
+    # Cria os botões de download para os arquivos gerados
+    st.download_button(
+        "Baixar Template",
+        df.to_csv(index=False, sep=";", encoding="ISO-8859-1"),
+        f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv",
+        "text/csv"
+    )
+    st.download_button(
+        "Baixar Base",
+        DF_final.to_csv(index=False, sep=";", encoding="utf-8"),
+        f"Base_{unb}_{data_inicio_default}.csv",
+        "text/csv"
+    )
 
     st.success("Arquivos gerados com sucesso!")
+else:
+    # Caso a coluna 'unb' não seja encontrada no CSV carregado
+    st.error("A coluna 'unb' não foi encontrada no arquivo CSV.")
+    st.stop()  # Interrompe a execução caso a coluna não exista
