@@ -6834,7 +6834,7 @@ else:  # Se nenhum arquivo foi enviado, usa o arquivo padrão "Book1.csv"
     try:
         df_pdvs = pd.read_csv("Book1.csv", encoding="utf-8", sep=";")
     except FileNotFoundError:
-        st.error("O arquivo 'Book1.csv' não foi encontrado.")
+        st.error("O arquivo 'Base Geo CO' não foi encontrado.")
         st.stop()  # Interrompe a execução se o arquivo não for encontrado
     except Exception as e:
         st.error(f"Erro ao carregar o arquivo padrão: {e}")
@@ -6848,19 +6848,16 @@ if 'unb' in df_pdvs.columns:
     # Filtra o DataFrame para incluir apenas as linhas que possuem o UNB correspondente
     filtrado_data = df_pdvs[df_pdvs['unb'].astype(str) == cod_unb]
 
-    # Verificar o número de linhas no DataFrame filtrado
-    num_rows = filtrado_data.shape[0]
-
-    # Se não houver dados filtrados, exibe uma mensagem de erro
-    if num_rows == 0:
-        st.warning("Nenhum dado correspondente ao UNB selecionado foi encontrado.")
-        st.stop()  # Interrompe a execução caso não haja dados
-
     # Quantidade de SKUs selecionados pelo usuário
     quantidade_skus = len(sku_selecionado)
 
-
-    filtrado_data['agrupador'] = range(1, quantidade_skus + 1)
+    filtrado_data = filtrado_data.copy()
+   
+    # Cria a sequência de 1 até quantidade_skus
+    sequencia_agrupador = ', '.join(str(i) for i in range(1, quantidade_skus + 1))
+   
+    # Adiciona a sequência à coluna 'agrupador'
+    filtrado_data['agrupador'] = sequencia_agrupador
     
 
     # Seleciona as colunas necessárias para o arquivo final
