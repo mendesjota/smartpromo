@@ -6739,7 +6739,7 @@ if promo_type == "Volume":
         st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima.")
         st.stop()
 
-    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=max_caixas)
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
 
     max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=max_pedidos)
     if max_skus < max_pedidos:
