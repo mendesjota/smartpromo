@@ -6736,15 +6736,15 @@ if promo_type == "Volume":
         st.warning("Preencha apenas um dos campos: Desconto Percentual ou TTV Fixo.")
         st.stop()
 
-   min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1) 
+    min_caixas = st.number_input("Mínimo de Caixas por PDV", min_value=1)
 
-   max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
+    max_caixas = st.number_input("Máximo de Caixas por PDV", min_value=min_caixas + 10)
     if max_caixas < min_caixas + 10:
         st.warning("A quantidade máxima de caixas por PDV deve ser pelo menos 10 unidades a mais que a quantidade mínima.")
         st.stop()
 
-   max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
-   
+    max_pedidos = st.number_input("Máx. Quantidade Pedidos Cliente", min_value=1)
+
     max_skus = st.number_input("Máx. Quantidade SKUs Cliente", min_value=max_pedidos)
     if max_skus < max_pedidos:
         st.warning("A quantidade máxima de SKUs por cliente deve ser maior ou igual à quantidade máxima de pedidos por cliente.")
