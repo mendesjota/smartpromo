@@ -6824,10 +6824,9 @@ if st.button("Gerar Arquivo CSV"):
 
     # Carregar base de clientes
     if csv_file:
-        df_pdvs = pd.read_csv(csv_file)
+        df_pdvs = pd.read_csv(csv_file) #o código esta travando aqui 
     else:
-        st.error("Base não encontrada. Verifique o caminho do arquivo.")
-        st.stop()
+        df_pdvs = pd.read_csv("Book1.csv", encoding="utf-8", sep=";")
 
     if 'unb' in df_pdvs.columns:
         cod_unb = unb.split(" - ")[0]
