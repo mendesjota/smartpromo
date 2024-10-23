@@ -6859,12 +6859,9 @@ if 'unb' in df_pdvs.columns:
     # Quantidade de SKUs selecionados pelo usuário
     quantidade_skus = len(sku_selecionado)
 
-    # Atribui valores à coluna 'agrupador', garantindo que o número de linhas seja adequado
-    if num_rows >= quantidade_skus:
-        filtrado_data['agrupador'] = range(1, quantidade_skus + 1)
-    else:
-        st.warning("A quantidade de SKUs selecionados é maior do que os dados disponíveis.")
-        st.stop()  # Interrompe a execução caso o número de SKUs seja maior que o número de linhas
+
+    filtrado_data['agrupador'] = range(1, quantidade_skus + 1)
+    
 
     # Seleciona as colunas necessárias para o arquivo final
     DF_final = filtrado_data[['agrupador', 'unb', 'pdv']]
