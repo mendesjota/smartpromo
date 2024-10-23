@@ -6677,6 +6677,10 @@ skus = [
 ("33826","BEATS RED MIX LT 473ML SH C12 NP"),("33836","BEATS RED MIX PET 1 L SH C/06"),("33857","STELLA ARTOIS PURE GOLD 600ML"),("33933","TONICA ANTARCTICA INTENSE LT SLEEK 350ML SH C 12"),("34027","GUARANA CHP ANTARCTICA LATA 350ML SH C/12 NPAL MULTIPACK"),
 
 ]
+import streamlit as st
+import pandas as pd
+from datetime import datetime, timedelta
+
 # Configurando a data de início e a data final padrão
 data_inicio_default = datetime.now() + timedelta(days=1)
 ultimo_dia_mes = (datetime.now().replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
@@ -6684,6 +6688,10 @@ ultimo_dia_mes = (datetime.now().replace(day=1) + timedelta(days=32)).replace(da
 # Exibe o título
 st.title("Gerador de Smart Promo")
 st.write("Ferramenta desenvolvida para ajudar as equipes de campo a preencher corretamente os templates de Smart Promo do CORA.")
+
+# Exemplo de dados para SKU e UNB Revenda
+skus = [(1001, "Produto A"), (1002, "Produto B"), (1003, "Produto C")]
+unb_revenda = [(5001, "Revenda A"), (5002, "Revenda B")]
 
 # Seleção de múltiplos SKUs e UNB Revenda
 sku_selecionado = st.multiselect("Selecione o SKU", options=[f"{num} - {nome}" for num, nome in skus])
@@ -6824,7 +6832,8 @@ if st.button("Gerar Arquivo CSV"):
     if csv_file:
         df_pdvs = pd.read_csv(csv_file)
     else:
-        df_pdvs = pd.read_csv("Book1.csv", encoding="utf-8", sep=";")
+        st.error("Base não encontrada. Verifique o caminho do arquivo.")
+        st.stop()
 
     if 'unb' in df_pdvs.columns:
         cod_unb = unb.split(" - ")[0]
