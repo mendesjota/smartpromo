@@ -6820,7 +6820,7 @@ if st.button("Gerar Arquivo CSV"):
                 "max_quantidade_skus_cliente": max_skus,
             })
 
-    DF = pd.DataFrame(dados)
+ template = pd.DataFrame(dados)
 
    # Carregar base de clientes
 if csv_file:  # Se o usuário fez upload de um arquivo CSV
@@ -6866,7 +6866,7 @@ if 'unb' in df_pdvs.columns:
     # Cria os botões de download para os arquivos gerados
     st.download_button(
         "Baixar Template",
-        DF.to_csv(index=False, sep=";", encoding="utf-8", errors='replace'),
+        template.to_csv(index=False, sep=";", encoding="utf-8", errors='replace'),
         f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv",
         "text/csv"
     )
