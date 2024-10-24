@@ -6866,13 +6866,13 @@ if 'unb' in df_pdvs.columns:
     # Cria os botões de download para os arquivos gerados
     st.download_button(
         "Baixar Template",
-        df.to_csv(index=False, sep=";", encoding="latin-1", errors='replace'),
+        df.to_csv(index=False, sep=";", encoding="utf-8", errors='replace'),
         f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv",
         "text/csv"
     )
     st.download_button(
         "Baixar Base",
-        DF_final.to_csv(index=False, sep=";", encoding="utf-8"),
+        DF_final.to_csv(index=False, sep=";", encoding="utf-8",errors='replace'),
         f"Base_{unb}_{data_inicio_default}.csv",
         "text/csv"
     )
