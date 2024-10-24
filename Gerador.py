@@ -6866,7 +6866,7 @@ if 'unb' in df_pdvs.columns:
     # Cria os botões de download para os arquivos gerados
     st.download_button(
         "Baixar Template",
-        template.to_csv(index=False, sep=";", encoding="ISO-8859-1", errors='replace'),
+        template.to_csv(index=False, sep=";", encoding="utf-8", errors='replace'),
         f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv",
         "text/csv"
     )
