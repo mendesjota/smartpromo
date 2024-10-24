@@ -6826,7 +6826,7 @@ if st.button("Gerar Arquivo CSV"):
 if csv_file:  # Se o usuário fez upload de um arquivo CSV
     # Tentativa de leitura do arquivo CSV enviado pelo usuário
     try:
-        df_pdvs = pd.read_csv(csv_file, , encoding="utf-8", sep=";")
+        df_pdvs = pd.read_csv(csv_file, encoding="utf-8", sep=";")
     except Exception as e:
         st.error(f"Erro ao carregar o arquivo CSV: {e}")
         st.stop()  # Interrompe a execução caso haja erro na leitura do arquivo
