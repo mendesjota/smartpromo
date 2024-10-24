@@ -6724,7 +6724,7 @@ if promo_type == "Volume":
     col1, col2 = st.columns(2)
 
     with col1:
-        desconto_percentual = st.text_input("Desconto Percentual (0 a 1.0)", key="desconto_percentual")
+        desconto_percentual = st.text_input("Desconto Percentual (0 a 0.59)", key="desconto_percentual")
 
     with col2:
         ttv_fixo = st.text_input("TTV Fixo", key="ttv_fixo")
