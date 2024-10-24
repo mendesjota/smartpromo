@@ -6820,7 +6820,7 @@ if st.button("Gerar Arquivo CSV"):
                 "max_quantidade_skus_cliente": max_skus,
             })
 
- template = pd.DataFrame(dados)
+template = pd.DataFrame(dados)
 
    # Carregar base de clientes
 if csv_file:  # Se o usuário fez upload de um arquivo CSV
