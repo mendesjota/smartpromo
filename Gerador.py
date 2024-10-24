@@ -6826,7 +6826,7 @@ if st.button("Gerar Arquivo CSV"):
 if csv_file:  # Se o usuário fez upload de um arquivo CSV
     # Tentativa de leitura do arquivo CSV enviado pelo usuário
     try:
-        df_pdvs = pd.read_csv(csv_file)
+        df_pdvs = pd.read_csv(csv_file, , encoding="utf-8", sep=";")
     except Exception as e:
         st.error(f"Erro ao carregar o arquivo CSV: {e}")
         st.stop()  # Interrompe a execução caso haja erro na leitura do arquivo
@@ -6866,7 +6866,7 @@ if 'unb' in df_pdvs.columns:
     # Cria os botões de download para os arquivos gerados
     st.download_button(
         "Baixar Template",
-        df.to_csv(index=False, sep=";", encoding="utf-8"),
+        df.to_csv(index=False, sep=";", encoding="latin-1", errors='replace'),
         f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv",
         "text/csv"
     )
