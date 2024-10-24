@@ -6820,7 +6820,7 @@ if st.button("Gerar Arquivo CSV"):
                 "max_quantidade_skus_cliente": max_skus,
             })
 
-    df = pd.DataFrame(dados)
+    DF = pd.DataFrame(dados)
 
    # Carregar base de clientes
 if csv_file:  # Se o usuário fez upload de um arquivo CSV
@@ -6866,7 +6866,7 @@ if 'unb' in df_pdvs.columns:
     # Cria os botões de download para os arquivos gerados
     st.download_button(
         "Baixar Template",
-        df.to_csv(index=False, sep=";", encoding="utf-8", errors='replace'),
+        DF.to_csv(index=False, sep=";", encoding="utf-8", errors='replace'),
         f"configuracao_promocao_{titulo_promocao}_{data_inicio_default}.csv",
         "text/csv"
     )
@@ -6878,6 +6878,7 @@ if 'unb' in df_pdvs.columns:
     )
 
     st.success("Arquivos gerados com sucesso!")
+    st.stop()  # Interrompe a execução caso a coluna não exista
 else:
     # Caso a coluna 'unb' não seja encontrada no CSV carregado
     st.error("A coluna 'unb' não foi encontrada no arquivo CSV.")
